@@ -1,10 +1,9 @@
 // Szene, Kamera und Renderer erstellen
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0x333333);  // Setzt eine initiale Hintergrundfarbe
-document.body.appendChild(renderer.domElement);
+document.getElementById('app-container').appendChild(renderer.domElement);
 
 // Orbit Controls
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -41,32 +40,83 @@ document.getElementById('upload').addEventListener('change', function (event) {
                 if (model) scene.remove(model);  // Entferne vorheriges Modell
                 model = gltf.scene;
                 scene.add(model);
+                updateSceneTree();
             });
         };
         reader.readAsArrayBuffer(file);
     }
 });
 
-// Farbe für Bauteile ändern
+// Funktion zur Farbänderung
 document.getElementById('colorPicker').addEventListener('input', function (event) {
     if (model) {
         model.traverse((child) => {
             if (child.isMesh) {
                 child.material.color.set(event.target.value);
+                child.material.transparent = true;
+                child.material.opacity = 1.0;
             }
         });
     }
 });
 
-// Hintergrundfarbe ändern
+// Funktion zur Hintergrundfarbe-Änderung
 document.getElementById('bgColorPicker').addEventListener('input', function (event) {
     renderer.setClearColor(event.target.value);
 });
 
-// Bodenfarbe ändern
+// Funktion zur Bodenfarbe-Änderung
 document.getElementById('groundColorPicker').addEventListener('input', function (event) {
     ground.material.color.set(event.target.value);
 });
+
+// Textur-Upload und Anwendung
+document.getElementById('texturePicker').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file && model) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const texture = new THREE.TextureLoader().load(e.target.result);
+            model.traverse((child) => {
+                if (child.isMesh) {
+                    child.material.map = texture;
+                    child.material.needsUpdate = true;
+                }
+            });
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Funktion zur Aktualisierung des Szenenbaums
+function updateSceneTree() {
+    const tree = document.getElementById('scene-tree');
+    tree.innerHTML = '';  // Szene löschen
+    addNodeToTree(tree, camera, 'Kamera');
+    addNodeToTree(tree, light, 'Licht');
+    if (model) {
+        addNodeToTree(tree, model, 'Modell');
+    }
+}
+
+function addNodeToTree(parent, object, label) {
+    const li = document.createElement('li');
+    li.textContent = label;
+    li.onclick = () => {
+        controls.target.copy(object.position);
+        camera.position.set(object.position.x + 2, object.position.y + 2, object.position.z + 2);
+        controls.update();
+    };
+    parent.appendChild(li);
+
+    if (object.children.length > 0) {
+        const ul = document.createElement('ul');
+        object.children.forEach(child => {
+            addNodeToTree(ul, child, child.name || 'Unbenanntes Objekt');
+        });
+        li.appendChild(ul);
+    }
+}
 
 // Render Loop
 function animate() {

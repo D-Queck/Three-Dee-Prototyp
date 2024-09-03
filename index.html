@@ -4,17 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Visualisierungsplattform</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <input type="file" id="upload" accept=".gltf,.glb">
-    <input type="color" id="colorPicker" value="#ffffff">
-    <input type="color" id="bgColorPicker" value="#333333">
-    <input type="color" id="groundColorPicker" value="#666666">
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <!-- Linke Spalte: 3D Szene -->
+            <div class="col-md-9 p-0">
+                <div id="app-container">
+                    <canvas id="scene-canvas"></canvas>
+                </div>
+            </div>
+
+            <!-- Rechte Spalte: Inspector -->
+            <div class="col-md-3 bg-light p-3" id="inspector">
+                <h5>Inspector</h5>
+                <label for="upload">Modell hochladen:</label>
+                <input type="file" id="upload" accept=".gltf,.glb" class="form-control">
+
+                <label for="colorPicker" class="mt-3">Objektfarbe:</label>
+                <input type="color" id="colorPicker" value="#ffffff" class="form-control">
+                <input type="file" id="texturePicker" accept="image/*" class="form-control mt-2">
+
+                <label for="bgColorPicker" class="mt-3">Hintergrundfarbe:</label>
+                <input type="color" id="bgColorPicker" value="#333333" class="form-control">
+
+                <label for="groundColorPicker" class="mt-3">Bodenfarbe:</label>
+                <input type="color" id="groundColorPicker" value="#666666" class="form-control">
+
+                <hr>
+                <h6>Szene</h6>
+                <ul id="scene-tree" class="list-unstyled">
+                    <!-- Dynamisch generierter Menübaum -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <!-- CDN für Three.js, GLTFLoader und OrbitControls -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
