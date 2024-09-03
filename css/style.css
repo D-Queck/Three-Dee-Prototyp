@@ -1,0 +1,31 @@
+body { 
+    margin: 0; 
+    overflow: hidden; 
+    font-family: Arial, sans-serif; 
+}
+
+canvas { 
+    display: block; 
+}
+
+#upload, #colorPicker, #bgColorPicker, #groundColorPicker {
+    position: absolute;
+    top: 20px;
+    z-index: 100;
+}
+
+#upload {
+    left: 20px;
+}
+
+#colorPicker {
+    left: 150px;
+}
+
+#bgColorPicker {
+    left: 300px;
+}
+
+#groundColorPicker {
+    left: 450px;
+}
