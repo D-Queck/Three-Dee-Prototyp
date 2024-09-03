@@ -12,14 +12,14 @@
     <div class="container-fluid h-100">
         <div class="row h-100">
             <!-- Linke Spalte: 3D Szene -->
-            <div class="col-md-9 p-0">
+            <div class="col-9 p-0" id="scene-container">
                 <div id="app-container">
                     <canvas id="scene-canvas"></canvas>
                 </div>
             </div>
 
             <!-- Rechte Spalte: Inspector -->
-            <div class="col-md-3 bg-light p-3" id="inspector">
+            <div class="col-3 bg-light p-3" id="inspector">
                 <h5>Inspector</h5>
                 <label for="upload">Modell hochladen:</label>
                 <input type="file" id="upload" accept=".gltf,.glb" class="form-control">
